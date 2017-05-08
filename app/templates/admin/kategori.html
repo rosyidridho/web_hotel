@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  {% include 'admin/head.html' %}
+
+  <!-- DataTables CSS -->
+  <link href="{{ url_for('static', filename='vendor/datatables-plugins/dataTables.bootstrap.css') }}" rel="stylesheet">
+
+  <!-- DataTables Responsive CSS -->
+  <link href="{{ url_for('static', filename='vendor/datatables-responsive/dataTables.responsive.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div id="wrapper">
+
+    <!-- NaviFgation -->
+    {% include 'admin/navigation.html' %}
+
+    <!-- Page Content -->
+    <div id="page-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="page-header">Kategori Kamar</h1>
+          </div>
+          <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <a data-toggle="modal" data-target="#tambah"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></a>
+                <h4 class="modal-title custom_align" id="Heading">Data Kategori Kamar</h4>
+              </div>
+              <!-- /.panel-heading -->
+              <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                  {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-info text-center"><span class="glyphicon glyphicon-info-sign"></span> {{message}} </div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endwith %}
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama Kategori</th>
+                      <th>Harga</th>
+                      <th>Gambar</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if kategori %}
+                    {% for ktg in kategori %}
+                    <tr class="odd gradeX">
+                      <td align="center">{{ loop.index }}</td>
+                      <td><a href="/admin/kategori-detail/{{ ktg[0] }}">{{ ktg[1] }}</a></td>
+                      <td>Rp.{{ ktg[2] }}</td>
+                      <td><a data-title="Edit" data-toggle="modal" data-target="#view{{ ktg[0] }}" title="View">{{ ktg[3] }}</a></td>
+                      <td align="center">
+                        <button class="btn btn-default btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit{{ ktg[0] }}" title="Edit"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <button class="btn btn-default btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete{{ ktg[0] }}" title="Delete"><span class="glyphicon glyphicon-trash"></span></button>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                      <td colspan="5" style="text-align: center;">Tidak Ada Data</td>
+                    {% endif %}
+                  </tbody>
+                </table>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+          </div>
+          <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+      {% for ktg in kategori %}
+      <div class="modal fade" id="edit{{ ktg[0] }}" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+              <h4 class="modal-title custom_align" id="Heading">Edit Fasilitas</h4>
+            </div>
+            <form class="form-horizontal" role="form" action="/admin/edit-kategori" method="POST" enctype="multipart/form-data">
+              <div class="modal-body" style="padding-right: 25px; padding-left: 25px;">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="control-label" for="nama_kategori">Nama Kategori</label>
+                    <div>
+                      <input id="nama_kategori" name="nama_kategori" type="text" placeholder="Nama Kateori" class="form-control" value="{{ ktg[1] }}" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="harga">Harga</label>
+                    <div>
+                      <input id="harga" name="harga" type="text" placeholder="Harga" class="form-control" value="{{ ktg[2] }}" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="gambar" class="control-label">Gambar</label>
+                    <input type="file" name="gambar" id="gambar">
+                  </div>
+                </fieldset>
+              </div>
+              <div class="modal-footer" style="padding-right: 25px; padding-left: 25px;">
+                <div class="form-group">
+                  <input type="hidden" value="{{ ktg[0] }}" name="id_ktg">
+                  <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!--edit-modal-->
+
+      <div class="modal fade" id="delete{{ ktg[0] }}" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+              <h4 class="modal-title custom_align" id="Heading">Delete</h4>
+            </div>
+            <div class="modal-body">
+
+              <div class="alert alert-danger text-center"><span class="glyphicon glyphicon-warning-sign"></span>  Apakah Anda Yakin Akan Menghapus Data <b>{{ ktg[1] }}</b>?</div>
+
+            </div>
+            <form action="/admin/del-kategori" method="POST">
+              <div class="modal-footer ">
+                <input type="hidden" value="{{ ktg[0] }}" name="id_ktg">
+                <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!--delete modal-->
+
+      <div class="modal fade" id="view{{ ktg[0] }}" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+              <h4 class="modal-title custom_align" id="Heading">View</h4>
+            </div>
+            <div class="modal-body">
+              <div class="view-image">
+                <img class="gambar" src="../../static/uploads/kategori_kamar/{{ ktg[3] }}" alt="{{ ktg[3] }}">
+              </div>
+              <p class="text-center">Kategori <b>{{ ktg[1] }}</b></p>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!--delete modal-->
+      {% endfor %}
+
+      <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+              <h4 class="modal-title custom_align" id="Heading">Tambah Fasilitas</h4>
+            </div>
+            <form class="form-horizontal" role="form" action="/admin/kategori" method="POST" enctype="multipart/form-data">
+              <div class="modal-body" style="padding-right: 25px; padding-left: 25px;">
+                <fieldset>
+                  <div class="form-group">
+                    <label class="control-label" for="nama_kategori">Nama Kategori</label>
+                    <div>
+                      <input id="nama_kategori" name="nama_kategori" type="text" placeholder="Nama Kategori" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="harga">Harga</label>
+                    <div>
+                      <input id="harga" name="harga" type="text" placeholder="Harga" class="form-control" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="gambar" class="control-label">Gambar</label>
+                    <input type="file" name="gambar" id="gambar">
+                  </div>
+                </fieldset>
+              </div>
+              <div class="modal-footer" style="padding-right: 25px; padding-left: 25px;">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!--tambah-modal-->
+
+    </div>
+    <!-- /#page-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!--javascript-->
+  {% include 'admin/js.html' %}
+
+  <!-- DataTables JavaScript -->
+  <script src="{{ url_for('static', filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="{{ url_for('static', filename='dist/js/sb-admin-2.js') }}"></script>
+  <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+  <script>
+  $(document).ready(function() {
+    $('#dataTables-example').DataTable({
+      responsive: true
+    });
+  });
+  </script>
+</body>
+
+</html>

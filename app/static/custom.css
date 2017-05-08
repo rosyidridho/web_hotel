@@ -1,0 +1,35 @@
+.profile-img
+{
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+.foto-mhs-area{
+  width:100%;
+  height:auto
+}
+.foto-mhs{
+  width:100%;
+  height:auto;
+  overflow:hidden
+}
+.foto-mhs img{
+  width:50%;
+  height: 50%
+}
+
+.view-image{
+  width: 300px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.gambar{
+  height: 100%;
+  width: 100%;
+}

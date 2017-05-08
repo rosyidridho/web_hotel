@@ -1,0 +1,14 @@
+{
+  "name_app": "Booking Hotel",
+  "description": "hdkhfgfiuygdigido",
+  "veersion": "0.1",
+  "license": "MIT",
+  "db": {
+    "db_host":"localhost",
+      "db_user": "root",
+      "db_password": "rosyidridho",
+      "db_name": "db_hotel"
+  },
+  "allowed_extensions": ["jpg", "JPG", "png", "PNG"],
+  "upload_folder": "app/static/uploads/"
+}
